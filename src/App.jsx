@@ -9,7 +9,7 @@ import http from "./service/todo-service";
 import EditHandler from "./components/EditHandler";
 function App() {
   const [todos, setTodos] = useState([]);
-  const [filteredTodos, setFilterdTodos] = useState(todos);
+  const [filteredTodos, setFilteredTodos] = useState(todos);
   const [modalState, setModalState] = useState(false);
   const [editedValue, setEditedValue] = useState({});
 
@@ -26,7 +26,7 @@ function App() {
         const updatedTodos = [...todos];
         updatedTodos[index] = selectedTodo;
         setTodos(updatedTodos);
-        setFilterdTodos(updatedTodos);
+        setFilteredTodos(updatedTodos);
         await http.put(`/todos/${selectedTodo.id}`, selectedTodo);
       }
       setModalState(false);
@@ -38,21 +38,21 @@ function App() {
   const filterTodos = async (value) => {
     switch (value) {
       case "all": {
-        setFilterdTodos(todos);
+        setFilteredTodos(todos);
         break;
       }
       case "completed": {
         const completedTodo = todos.filter((item) => item.isCompleted);
-        setFilterdTodos(completedTodo);
+        setFilteredTodos(completedTodo);
         break;
       }
       case "uncompleted": {
         const uncompleted = todos.filter((item) => !item.isCompleted);
-        setFilterdTodos(uncompleted);
+        setFilteredTodos(uncompleted);
         break;
       }
       default:
-        return setFilterdTodos(todos);
+        return setFilteredTodos(todos);
     }
   };
 
@@ -66,7 +66,7 @@ function App() {
       const updatedTodos = [...data];
       updatedTodos[index] = selectedTodo;
       setTodos(updatedTodos);
-      setFilterdTodos(updatedTodos);
+      setFilteredTodos(updatedTodos);
       await http.put(`/todos/${item.id}`, selectedTodo);
     } catch (error) {
       alert(error);
@@ -77,7 +77,7 @@ function App() {
     try {
       const updatedTodos = todos.filter((todo) => todo.id !== item.id);
       setTodos(updatedTodos);
-      setFilterdTodos(updatedTodos);
+      setFilteredTodos(updatedTodos);
       const { data } = await http.get("/todos");
       const selectedTodo = data.find((todo) => {
         return todo.id === item.id;
@@ -101,7 +101,7 @@ function App() {
       isCompleted: false,
     };
     setTodos([...todos, newTodo]);
-    setFilterdTodos([...filteredTodos, newTodo]);
+    setFilteredTodos([...filteredTodos, newTodo]);
 
     saveData(newTodo);
   };
@@ -111,9 +111,9 @@ function App() {
       try {
         const { data } = await http.get("/todos");
         setTodos(data);
-        setFilterdTodos(data);
+        setFilteredTodos(data);
       } catch (error) {
-        alert("Error");
+        alert("Error Load Todos");
       }
     };
     getDate();
@@ -122,7 +122,7 @@ function App() {
     try {
       const res = await http.post("/todos", newTodo);
     } catch (error) {
-      alert("Error");
+      alert("Error saving");
     }
   };
 
